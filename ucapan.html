@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chest Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0e4d7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      /* CHEST CONTAINER */
+      .chest-container {
+        display: flex;
+        gap: 80px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .chest {
+        width: 150px;
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.5s ease;
+      }
+
+      .chest-name {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .chest-img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        transition: transform 0.5s ease;
+        pointer-events: none;
+      }
+
+      .chest.open {
+        transform: translateY(-100px);
+      }
+
+      .message-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        max-height: 70vh;
+        background: #fff9e5;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        font-family: "Indie Flower", cursive;
+        font-size: 20px;
+        display: none;
+        z-index: 2;
+        overflow-y: auto;
+      }
+
+      .message-container.show {
+        display: block;
+        animation: fadeIn 0.5s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -45%);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      .btn-back {
+        margin-top: 15px;
+        padding: 5px 15px;
+        cursor: pointer;
+        background: #a0522d;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      audio {
+        margin-top: 10px;
+        width: 100%;
+      }
+
+      /* TOMBOL LANJUT */
+      #continueBtn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        padding: 10px 20px;
+        font-size: 18px;
+        background: #ff6347;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: none;
+        z-index: 3;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      #continueBtn.show {
+        display: block;
+        opacity: 1;
+      }
+
+      /* PESAN AKHIR FULL SCREEN */
+      #finalMessage {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        font-size: 48px;
+        font-weight: bold;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      /* TULISAN FADE IN */
+      .finalText {
+        opacity: 0;
+        transition: opacity 1s ease;
+        margin-top: 15px;
+      }
+
+      .finalText.show {
+        opacity: 1;
+      }
+
+      /* TOMBOL HOME ICON */
+      #homeBtn {
+        position: fixed;
+        bottom: 50px;
+        left: 50%;
+        padding: 5px;
+        transform: translateX(-50%);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        opacity: 0;
+        display: none;
+        z-index: 11;
+        transition: opacity 1s ease;
+      }
+
+      #homeBtn.show {
+        display: block;
+        opacity: 1;
+      }
+
+      @keyframes fadeOutAll {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      /* CANVAS CONFETTI */
+      #confettiCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 12;
+        display: none;
+      }
+
+      /* FOTO */
+      #finalPhoto {
+        max-width: 250px; /* ukuran maksimal lebar */
+        max-height: 250px; /* ukuran maksimal tinggi */
+        width: auto; /* biar proporsinya sesuai */
+        height: auto; /* biar proporsinya sesuai */
+        border-radius: 12px;
+        margin-top: 20px;
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      #finalPhoto.show {
+        opacity: 1;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="chest-container">
+      <div class="chest" id="chestA">
+        <div class="chest-name">A</div>
+        <img src="close-chest.png" class="chest-img" id="imgA" />
+      </div>
+      <div class="chest" id="chestB">
+        <div class="chest-name">B</div>
+        <img src="close-chest.png" class="chest-img" id="imgB" />
+      </div>
+    </div>
+
+    <div class="message-container" id="messageA">
+      <p>Halo! Ini ucapan dari chest A 📝</p>
+      <audio controls><source src="audioA.mp3" type="audio/mpeg" /></audio>
+      <button class="btn-back" id="backA">X</button>
+    </div>
+
+    <div class="message-container" id="messageB">
+      <p>Halo! Ini ucapan dari chest B 📝</p>
+      <audio controls><source src="audioB.mp3" type="audio/mpeg" /></audio>
+      <button class="btn-back" id="backB">X</button>
+    </div>
+
+    <button id="continueBtn">Lanjut →</button>
+    <div id="finalMessage">
+      <div id="text1" class="finalText">Selamat ulang tahun ya!</div>
+      <div id="text2" class="finalText">Kakak kita semua</div>
+      <div id="text3" class="finalText">Dayana Laurent</div>
+      <img
+        id="finalPhoto"
+        src="https://cdn.discordapp.com/attachments/1410214667447697418/1428351530502852659/dayana_tiktok_story_4.jpeg?ex=699d9286&is=699c4106&hm=478311ae457462ef4fbe8f6d3b581e043f77ff5a592b75fde7b1cb0a5ae0a550"
+        alt="Dayana"
+      />
+    </div>
+    <button id="homeBtn">
+      <img src="home.png" alt="" style="width: 30px; height: 30px" />
+    </button>
+
+    <canvas id="confettiCanvas"></canvas>
+
+    <script>
+      const chests = [
+        {
+          div: document.getElementById("chestA"),
+          img: document.getElementById("imgA"),
+          message: document.getElementById("messageA"),
+        },
+        {
+          div: document.getElementById("chestB"),
+          img: document.getElementById("imgB"),
+          message: document.getElementById("messageB"),
+        },
+      ];
+
+      let openedChests = new Set();
+      const continueBtn = document.getElementById("continueBtn");
+      const finalMessage = document.getElementById("finalMessage");
+      const homeBtn = document.getElementById("homeBtn");
+      const confettiCanvas = document.getElementById("confettiCanvas");
+
+      const text1 = document.getElementById("text1");
+      const text2 = document.getElementById("text2");
+      const text3 = document.getElementById("text3");
+      const finalPhoto = document.getElementById("finalPhoto");
+
+      function openChest(chest) {
+        chests.forEach((c) => {
+          if (c !== chest) c.div.style.display = "none";
+        });
+        chest.div.style.display = "flex";
+        chest.div.classList.add("open");
+        chest.img.src = "open-chest.png";
+        chest.message.classList.add("show");
+
+        openedChests.add(chest.div.id);
+        if (openedChests.size === chests.length) {
+          continueBtn.classList.add("show");
+        }
+      }
+
+      function backToChests() {
+        chests.forEach((c) => {
+          c.div.style.display = "flex";
+          c.div.classList.remove("open");
+          c.img.src = "close-chest.png";
+          c.message.classList.remove("show");
+        });
+      }
+
+      chests.forEach((c) => {
+        c.div.addEventListener("click", () => {
+          if (c.div.classList.contains("open")) {
+            backToChests();
+          } else {
+            openChest(c);
+          }
+        });
+      });
+
+      document.getElementById("backA").addEventListener("click", backToChests);
+      document.getElementById("backB").addEventListener("click", backToChests);
+
+      continueBtn.addEventListener("click", () => {
+        document.querySelector(".chest-container").style.animation =
+          "fadeOutAll 0.5s forwards";
+        continueBtn.style.animation = "fadeOutAll 0.5s forwards";
+        chests.forEach((c) => c.message.classList.add("fadeOut"));
+
+        setTimeout(() => {
+          document.querySelector(".chest-container").style.display = "none";
+          chests.forEach((c) => (c.message.style.display = "none"));
+          continueBtn.style.display = "none";
+
+          finalMessage.style.display = "flex";
+          setTimeout(() => {
+            finalMessage.style.opacity = 1;
+
+            // mulai confetti
+            startConfetti();
+
+            // fade in text bertahap
+            setTimeout(() => {
+              text1.classList.add("show");
+            }, 0);
+            setTimeout(() => {
+              text2.classList.add("show");
+            }, 2000);
+            setTimeout(() => {
+              text3.classList.add("show");
+            }, 4000);
+            setTimeout(() => {
+              finalPhoto.classList.add("show");
+            }, 6000);
+
+            // tombol home muncul 3 detik setelah pesan akhir
+            setTimeout(() => {
+              homeBtn.classList.add("show");
+            }, 8000);
+          }, 50);
+        }, 500);
+      });
+
+      homeBtn.addEventListener("click", () => {
+        window.location.href = "home.html";
+      });
+
+      // ======================
+      // CONFETTI FUNCTION
+      // ======================
+      function startConfetti() {
+        confettiCanvas.style.display = "block";
+        const ctx = confettiCanvas.getContext("2d");
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+
+        const confettiCount = 150;
+        const confettis = [];
+
+        for (let i = 0; i < confettiCount; i++) {
+          confettis.push({
+            x: Math.random() * confettiCanvas.width,
+            y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+            r: Math.random() * 6 + 4,
+            d: Math.random() * confettiCount,
+            color: `hsl(${Math.random() * 360},100%,50%)`,
+            tilt: Math.random() * 10 - 10,
+            tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+            tiltAngle: 0,
+          });
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+          confettis.forEach((c) => {
+            ctx.beginPath();
+            ctx.lineWidth = c.r;
+            ctx.strokeStyle = c.color;
+            ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+            ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
+            ctx.stroke();
+          });
+          update();
+          requestAnimationFrame(draw);
+        }
+
+        function update() {
+          confettis.forEach((c) => {
+            c.tiltAngle += c.tiltAngleIncremental;
+            c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+            c.tilt = Math.sin(c.tiltAngle) * 15;
+
+            if (c.y > confettiCanvas.height) {
+              c.y = -10;
+              c.x = Math.random() * confettiCanvas.width;
+            }
+          });
+        }
+
+        draw();
+      }
+    </script>
+  </body>
+</html>
