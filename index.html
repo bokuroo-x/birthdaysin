@@ -1546,8 +1546,8 @@
         </div>
       </div>
 
-      <h2>ciee ada yang ulang tahun nih</h2>
-      <div class="sub">kepo ga queen? 🎂</div>
+      <h2>a little something for Sinta</h2>
+      <div class="sub">kepo ya queen?</div>
       <button id="beginBtn">langsung saja</button>
     </div>
 
@@ -1709,16 +1709,61 @@
       <p style="margin-top: 0"><b>- Gaiska (Tonyyyy)</b></p>
       <p style="margin-top: 0"><b>JANGAN LUPA DENGERIN VN!</b></p>
       <hr />
-      <audio controls>
+      <audio controls id="audioA">
         <source src="vn tony - dengerin dah pokoknya.mp3" type="audio/mpeg" />
       </audio>
       <button class="btn-back" id="backA">X</button>
     </div>
 
     <div class="message-container" id="messageB">
-      <p>Halo! Ini ucapan dari chest B 📝</p>
+      <p style="margin-bottom: 0">
+        <strong>hai Day, eh Sinta (si akrab)</strong>
+      </p>
+
+      <p>gua disini sekalian mau sedikit curhat kali ya hehe</p>
+      <p style="text-indent: 2em">
+        gua pertama kali nonton lu karena lu ngajar bahasa prancis day 02
+        (tolong kembalikan replay stream itu) dan itu masuk algoritma beranda
+        YouTube gua. ketika gua tonton, gua salut karena lu masih se-antusias
+        itu untuk mengajar (kalo inget momen itu rasanya masih terharu).
+        disitulah muncul rasa gua pengen dukung lu sepenuhnya. that's why gua
+        mulai aktif di livechat walaupun gua ga se-aktif Tony hehe.
+      </p>
+
+      <p style="text-indent: 2em">
+        di malam ketika gua jadi moderator, sebelum lu stream itu gua udah
+        mikirin kalo gua pengen bantu jaga livechat, bantu bantu lu tapi rasanya
+        ga layak aja kalo tiba tiba minta dijadiin moderator. tapi ketika stream
+        dimulai, lu langsung jadiin gua moderator, itu suatu kebetulan yang ga
+        bakal gua lupain sih. ga perlu ditanya senengnya gimana.
+      </p>
+      <p style="text-indent: 2em">
+        gua bersyukur banget bisa kenal sama lu although we’re not that close
+        yet, I’d love to get to know you better. <br />
+        tapi dari semua yang udah lu lakuin, gua tau, lu orangnya super baik
+        banget. baik ke semua orang. <br />salah satunya ke gua.<br />
+        dari beberapa streamer yang udah gua clip, gua ga pernah ngerasa
+        diapresiasi sebaik lu apresiasi gua.
+      </p>
+      <p style="text-indent: 2em">
+        jadi selama gua masih disini, gua akan tetap dukung lu (clip lu yang gua
+        bikin pake lagu lany - live it down bukan tanpa alasan kan?) gua
+        berusaha sebisa gua untuk memberikan return yang mungkin berguna untuk
+        lu juga. dengan begitu juga gua ngerasa diri gua berguna untuk orang
+        lain. jadi, mari nikmati momen-momen dan keseruan kedepannya selagi
+        masih ada.
+      </p>
+      <p style="text-indent: 2em">
+        jadiii terimakasih ya Sin, lu banyak nyelamatin hari-hari gua. tetaplah
+        jadi orang baik. tetaplah bahagia. gua gak tega liat kakak gua sedih.
+        hope life is treatin' you well too yaa 🤍
+      </p>
+      <p style="margin-top: 0"><b>- Fareezha (Bokuroo)</b></p>
       <hr />
-      <audio controls><source src="audioB.mp3" type="audio/mpeg" /></audio>
+      <p style="margin-top: 0"><b>LANJUT PART 2 di VN</b></p>
+      <audio controls id="audioB">
+        <source src="vn buro - sm2.mp3" type="audio/mpeg" />
+      </audio>
       <button class="btn-back" id="backB">X</button>
     </div>
 
@@ -1728,12 +1773,12 @@
       <div id="finalContent">
         <div id="polaroidFrame">
           <img id="finalPhoto" src="images/final.jpeg" alt="Dayana" />
-          <div id="polaroidCaption">kakak 🤍</div>
+          <div id="polaroidCaption">beautiful, as always🤍</div>
         </div>
-        <div id="text1" class="finalText">Selamat ulang tahun ya!</div>
-        <div id="text2" class="finalText">yang ke berapa?</div>
-        <div id="text3" class="finalText">Sinta M</div>
-        <div id="text4">ga usah senyum senyum gitu queen bacanya</div>
+        <div id="text1" class="finalText">Selamat Ulang Tahun Ya!</div>
+        <div id="text2" class="finalText">yang ke 17102383</div>
+        <div id="text3" class="finalText">Sinta Monika</div>
+        <div id="text4">ga usah senyum senyum gitu queen bacanya :P</div>
       </div>
     </div>
 
@@ -1812,14 +1857,12 @@
 
       const sender1 = {
         name: "Bokuroo",
-        avatar:
-          "https://cdn.discordapp.com/avatars/376695501787234304/fc65a16168dfdf039e87ff536fcf594b.png?size=1024",
+        avatar: "images/pp buro.png",
         side: "right",
       };
       const sender2 = {
-        name: "Tony",
-        avatar:
-          "https://cdn.discordapp.com/avatars/515501645409550336/85c8172e24fe5674d5ec0b74dee20852.png?size=1024",
+        name: "Tonyyyy",
+        avatar: "images/pp tony.png",
         side: "left",
       };
 
@@ -2480,12 +2523,14 @@
         chest.img.src = "open-chest.png";
         chest.message.classList.add("show");
         chest.audio.currentTime = 0;
-        chest.audio.volume = 0.5;
+        chest.audio.volume = 0.3;
         chest.audio.play().catch(() => {});
         openedChests.add(chest.div.id);
         if (openedChests.size === chests.length)
           continueBtn.classList.add("show");
         document.getElementById("paperOverlay").classList.add("dim");
+        // Hide continueBtn while paper is open
+        continueBtn.classList.remove("show");
       }
 
       function backToChests() {
@@ -2496,7 +2541,18 @@
           c.message.classList.remove("show");
           fadeOutChestAudio(c.audio);
         });
+        // Stop VN audio
+        ["audioA", "audioB"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.pause();
+            el.currentTime = 0;
+          }
+        });
         document.getElementById("paperOverlay").classList.remove("dim");
+        // Show continueBtn again if all chests opened
+        if (openedChests.size === chests.length)
+          continueBtn.classList.add("show");
       }
 
       chests.forEach((c) =>
