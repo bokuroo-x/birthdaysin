@@ -2349,9 +2349,9 @@
 
       function getPhotoSize() {
         const w = window.innerWidth;
-        if (w < 480) return 60 + Math.random() * 60;
-        if (w < 900) return 80 + Math.random() * 80;
-        return 120 + Math.random() * 130;
+        if (w < 480) return 100 + Math.random() * 100;   // mobile: 100–200px
+        if (w < 900) return 130 + Math.random() * 120;   // tablet: 130–250px
+        return 120 + Math.random() * 130;                // desktop: tidak berubah
       }
 
       function createPhoto(photoObj) {
